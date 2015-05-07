@@ -70,10 +70,11 @@ int main(int /*argc*/, const char** /*argv*/)
 				auto med_f = mean(frame_avg);
 				auto med_l_f = mean(out_frame_k);
 
-				frame_avg = frame_avg - med_f;
+				Mat last_frame_k = last_frame - med_f;
 				out_frame_k = out_frame_k - med_l_f;
 
-
+				SHOW(last_frame_k);
+				SHOW(out_frame_k);
 
 				float kerData[] = {
 					1,	0.01,	-1,
@@ -90,7 +91,7 @@ int main(int /*argc*/, const char** /*argv*/)
 				memcpy(ker1.data, kerData, sizeof(kerData));
 
 				filter2D(out_frame_k, frame_avg, -1, ker1);
-				filter2D(last_frame, last_frame_avg, -1, ker1);
+				filter2D(last_frame_k, last_frame_avg, -1, ker1);
 				
 
 
