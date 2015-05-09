@@ -103,7 +103,7 @@ int main(int /*argc*/, const char** /*argv*/)
 		} 
 		else
 		{
-			Mat stabiliaztion_mat = findRANSACHomography(last_frame, frame);
+			Mat stabiliaztion_mat = estimateRigidTransform(last_frame, frame,true);
 			if (stabiliaztion_mat.empty())
 			{
 				printf("Error: cannot estimateRigidTransform\n");
@@ -115,7 +115,7 @@ int main(int /*argc*/, const char** /*argv*/)
 
 				 
 
-				Mat frame_avg, last_frame_avg;
+				Mat frame_avg, last_frame_avg,abs_diff_k;
 
 				auto med_l_f = mean(last_frame);
 				auto med_f = mean(frame_w);
@@ -123,12 +123,12 @@ int main(int /*argc*/, const char** /*argv*/)
 				Mat last_frame_k = last_frame - med_l_f;
 				frame_k = frame_w - med_f;
 
-
+				absdiff(last_frame_k, frame_k, abs_diff_k);
 				
-				//SHOW(abs_diff_k);
+				SHOW(abs_diff_k);
 
 				//SHOW(last_frame_k);
-				//SHOW(frame_k);
+				SHOW(frame_k);
 
 				float kerData[] = {
 					1,	0.01,	-1,
@@ -179,7 +179,7 @@ int main(int /*argc*/, const char** /*argv*/)
 		last_frame = frame;
 
 		printf("Processing: %d time: %f ms +time:%f \n", frame_index, exec_time, 1000 / fps - exec_time);
-		waitKey(100/*MAX(10,1000/fps - exec_time)*/);
+		waitKey(1000/*MAX(10,1000/fps - exec_time)*/);
 	}
 	
 
